@@ -172,6 +172,7 @@ body{
   justify-content:space-around;
 }
 
+/* Clickable nav buttons */
 .nav-item{
   display:flex;
   flex-direction:column;
@@ -179,6 +180,24 @@ body{
   gap:4px;
   color:var(--muted);
   font-size:14px;
+}
+
+.nav-item button{
+  all:unset;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+  border-radius:12px;
+  transition: all 0.2s ease;
+}
+
+.nav-item button:hover{
+  background:#f4f6fc;
+  transform:scale(1.05);
+  color:var(--accent);
 }
 
 .nav-item span{
@@ -229,16 +248,22 @@ body{
       <div class="footer-title" id="benefitsTitle">(Benefícios & Penalizações)</div>
       <div class="navbar">
         <div class="nav-item">
-          <span>👤</span>
-          <div>perfil</div>
+          <button onclick="alert('Abrir perfil')">
+            <span>👤</span>
+            <div>perfil</div>
+          </button>
         </div>
         <div class="nav-item">
-          <span>💬</span>
-          <div>mensagens</div>
+          <button onclick="alert('Abrir mensagens')">
+            <span>💬</span>
+            <div>mensagens</div>
+          </button>
         </div>
         <div class="nav-item">
-          <span>🔍</span>
-          <div>procura</div>
+          <button onclick="alert('Procurar áreas')">
+            <span>🔍</span>
+            <div>procura</div>
+          </button>
         </div>
       </div>
     </div>
