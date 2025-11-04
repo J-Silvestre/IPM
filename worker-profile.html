@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Perfil Arquiteto</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.onload = () => {
+      const params = new URLSearchParams(location.search);
+      const i = params.get('i') || 0;
+      document.getElementById('titulo').textContent = "Arquiteto " + (parseInt(i)+1);
+    };
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="top-icons">
+        <button class="icon-btn" onclick="location.href='arquitetos.html'">←</button>
+        <div id="titulo" style="font-weight:700;">Arquiteto</div>
+        <div style="width:44px"></div>
+      </div>
+
+      <div class="form-group"><div class="label">Nome Completo</div><div class="input"><input value="Arquiteto Exemplo"></div></div>
+      <div class="form-group"><div class="label">Entidade</div><div class="input"><input value="Estúdio Design+"></div></div>
+      <div class="form-group"><div class="label">NIF / NIPC</div><div class="input"><input value="123456789"></div></div>
+      <div class="form-group"><div class="label">Morada</div><div class="input"><input value="Rua dos Projetos, 45"></div></div>
+      <div class="form-group"><div class="label">Concelhos</div><div class="input"><input value="Lisboa, Cascais"></div></div>
+      <div class="form-group"><div class="label">Telemóvel</div><div class="input"><input value="+351 912 345 678"></div></div>
+      <div class="form-group"><div class="label">Email</div><div class="input"><input value="arquiteto@exemplo.pt"></div></div>
+      <div class="form-group"><div class="label">Categoria</div><div class="input"><input value="Arquiteto"></div></div>
+
+      <div class="form-group">
+        <div class="label">Breve descrição</div>
+        <div class="input">
+          <textarea rows="3" placeholder="Breve resumo do arquiteto...">Experiência em projetos sustentáveis e reabilitação urbana.</textarea>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="location.href='chat.html'">Enviar Mensagem</button>
+    </div>
+  </div>
+</body>
+</html>
