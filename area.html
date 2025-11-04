@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>App — Seleciona uma Área</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // simples lógica de zoom / seleção para protótipo
+    function zoom(delta){
+      const el = document.getElementById('mapBox');
+      let s = Number(el.dataset.scale || 1);
+      s = Math.max(0.5, Math.min(3, s + delta));
+      el.style.transform = 'scale(' + s + ')';
+      el.dataset.scale = s;
+    }
+    function toggleSelect(){
+      const el = document.getElementById('selectState');
+      el.textContent = el.dataset.selected === '1' ? 'Selecionar uma Área' : 'Área selecionada ✓';
+      el.dataset.selected = el.dataset.selected === '1' ? '0' : '1';
+    }
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="card" role="main" aria-labelledby="areaTitle">
+      <div class="top-icons">
+        <button class="icon-btn" onclick="location.href='index.html'" aria-label="Perfil">🏠</button>
+        <div style="font-weight:700">Concelho de ...</div>
+        <button class="icon-btn" aria-label="Pesquisar">🔍</button>
+      </div>
+
+      <h2 id="areaTitle" style="margin-top:6px">Seleciona uma Área</h2>
+
+      <div class="map-box" id="mapBox" data-scale="1">
+        <div class="map-placeholder" style="padding:18px;">
+          <div style="font-weight:700;margin-bottom:6px">Mapa / Area (protótipo)</div>
+          <div id="selectState" data-selected="0">Selecionar uma Área</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px">Toca para marcar uma área aproximada</div>
+          <div style="margin-top:12px;">
+            <button class="btn" onclick="toggleSelect()">Alternar seleção</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div class="controls">
+          <button class="zoom-btn" aria-label="Diminuir" onclick="zoom(-0.1)">−</button>
+          <button class="zoom-btn" aria-label="Aumentar" onclick="zoom(0.1)">+</button>
+          <div style="font-size:13px;color:var(--muted);margin-left:8px;">Termos... <span style="font-weight:700">1 km</span></div>
+        </div>
+
+        <div style="text-align:right">
+          <div style="font-size:12px;color:var(--muted)">Filtros</div>
+          <div style="margin-top:6px;">
+            <button class="btn btn-ghost" onclick="alert('Filtros (simulação)')">⚙️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="pill">Benefícios & Penalizações</div>
+        <div>
+          <button class="btn btn-primary" onclick="alert('Enviar pedido (simulação)')">Enviar</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:13px">
+        Este ecrã corresponde ao esboço com mapa, controles de zoom, termos e botão de benefícios.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

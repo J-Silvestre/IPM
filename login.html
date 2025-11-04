@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>App — Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Contas válidas (exemplo local)
+    const contasValidas = [
+      { email: "admin@example.com", password: "123456" },
+      { email: "teste@dominio.pt", password: "abc123" },
+      { email: "joao@empresa.pt", password: "senha" }
+    ];
+
+    function login() {
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value.trim();
+
+      // Verifica se existe conta válida
+      const conta = contasValidas.find(c => c.email === email && c.password === password);
+
+      const msg = document.getElementById("mensagem");
+      if (conta) {
+        msg.style.color = "green";
+        msg.textContent = "Login bem-sucedido! A redirecionar...";
+        // Simula tempo de carregamento
+        setTimeout(() => {
+          location.href = "area.html";
+        }, 800);
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "E-mail ou password inválidos.";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="card" role="main" aria-labelledby="loginTitle">
+      <div class="top-icons">
+        <div class="icon-btn" aria-hidden="true">☰</div>
+        <div style="font-weight:700">PPM+</div>
+        <div class="icon-btn" aria-hidden="true">❓</div>
+      </div>
+
+      <h1 id="loginTitle" class="login-title">Iniciar sessão</h1>
+
+      <div class="center-box">
+        <div class="form-group">
+          <div class="label">E-mail</div>
+          <div class="input">
+            <input type="email" id="email" placeholder="teu@exemplo.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label">Password</div>
+          <div class="input">
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="location.href='area.html'">Iniciar Sessão</button>
+
+        <button class="btn btn-ghost" onclick="location.href='account-creation.html'">Criar Conta</button>
+      </div>
+
+      <div style="margin-top:18px;color:var(--muted);font-size:13px;text-align:center;">
+        PDM+ — Protótipo de Alta Fidelidade
+      </div>
+    </div>
+  </div>
+</body>
+</html>
