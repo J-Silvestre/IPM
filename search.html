@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Procurar Profissionais</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const categorias = [
+      "Arquitetos",
+      "Canalizadores",
+      "Carpinteiros",
+      "Eletricistas",
+      "Engenheiros",
+      "Pedreiros",
+      "Pintores"
+    ];
+
+    window.onload = () => {
+      const lista = document.getElementById('lista');
+      categorias.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'input';
+        item.style.cursor = 'pointer';
+        item.style.alignItems = 'center';
+        item.style.fontWeight = '500';
+        item.innerHTML = `
+          <span>${c}</span>
+          <span style="margin-left:auto;font-size:22px;">→</span>
+        `;
+        item.onclick = () => {
+          if (c === "Arquitetos") location.href = "arquitetos.html";
+          else alert("Página de " + c + " ainda não implementada.");
+        };
+        lista.appendChild(item);
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="top-icons">
+        <button class="icon-btn" onclick="history.back()" aria-label="Voltar">←</button>
+        <div style="display:flex;align-items:center;gap:6px;flex:1;max-width:300px;">
+          🔍 <input type="text" placeholder="Procurar" style="border:none;outline:none;font-size:16px;width:100%;background:transparent;">
+        </div>
+      </div>
+
+      <div id="lista" style="display:flex;flex-direction:column;gap:12px;margin-top:18px;"></div>
+    </div>
+  </div>
+</body>
+</html>
