@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil</title>
+<style>
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #f3f4f7;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.container {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(26,32,50,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.header button {
+  all: unset;
+  cursor: pointer;
+  color: var(--accent, #2a6bf6);
+  font-size: 18px;
+}
+.header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.label {
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
+.value {
+  color: #555;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 6px;
+}
+.descricao {
+  margin-top: 20px;
+}
+.descricao h3 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  color: #333;
+}
+.descricao textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f2f2f2;
+  color: #333;
+  font-size: 14px;
+  padding: 10px;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+.descricao textarea:focus {
+  border: 1px solid #2a6bf6;
+  background: #fff;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button onclick="location.href='area.html'">⬅</button>
+      <h2>Perfil</h2>
+    </div>
+
+    <div class="info">
+      <div>
+        <div class="label">Nome completo</div>
+        <div class="value">Arquiteto 1</div>
+      </div>
+
+      <div>
+        <div class="label">Entidade</div>
+        <div class="value">Atelier XYZ</div>
+      </div>
+
+      <div>
+        <div class="label">NIF / NIPC</div>
+        <div class="value">123456789</div>
+      </div>
+
+      <div>
+        <div class="label">Morada</div>
+        <div class="value">Rua das Oliveiras, nº 45, Lisboa</div>
+      </div>
+
+      <div>
+        <div class="label">Concelhos onde projecta</div>
+        <div class="value">Lisboa, Vila Franca de Xira, Sintra</div>
+      </div>
+
+      <div>
+        <div class="label">Telemóvel</div>
+        <div class="value">912 345 678</div>
+      </div>
+
+      <div>
+        <div class="label">E-mail</div>
+        <div class="value">arquiteto1@email.com</div>
+      </div>
+    </div>
+
+    <div class="descricao">
+      <h3>Breve Descrição</h3>
+      <textarea placeholder="Escreva algo sobre si..."></textarea>
+    </div>
+  </div>
+</body>
+</html>

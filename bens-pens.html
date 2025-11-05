@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benefícios e Penalizações</title>
+<style>
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #f3f4f7;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.container {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(26,32,50,0.08);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.header button {
+  all: unset;
+  cursor: pointer;
+  color: var(--accent, #2a6bf6);
+  font-size: 18px;
+}
+.header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Section titles */
+h3 {
+  font-size: 16px;
+  color: #2a6bf6;
+  margin: 14px 0 6px 0;
+}
+ul {
+  margin: 0 0 12px 20px;
+  padding: 0;
+  color: #444;
+  font-size: 14px;
+}
+ul li {
+  margin-bottom: 6px;
+}
+
+/* Area name */
+.area-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 10px;
+  color: #777;
+  font-size: 14px;
+}
+.footer div {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button onclick="history.back()">⬅</button>
+      <h2 id="concelhoHeader">Concelho de ...</h2>
+    </div>
+
+    <!-- Area name -->
+    <div class="area-name" id="areaName">Nome da área selecionada</div>
+
+    <!-- Benefícios -->
+    <div class="section">
+      <h3>Benefícios:</h3>
+      <ul>
+        <li>Redução de taxas municipais</li>
+        <li>Prioridade em licenciamento</li>
+        <li>Apoios financeiros ou técnicos</li>
+      </ul>
+    </div>
+
+    <!-- Penalizações -->
+    <div class="section">
+      <h3>Penalizações:</h3>
+      <ul>
+        <li>Perda de incentivos por incumprimento</li>
+        <li>Multas administrativas</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>Concelho</div>
+      <div>Área</div>
+      <div>Termos</div>
+    </div>
+  </div>
+
+<script>
+// Get selected concelho from URL
+const params = new URLSearchParams(window.location.search);
+const concelho = params.get("concelho");
+if (concelho) {
+  document.getElementById("concelhoHeader").textContent = `Concelho de ${concelho}`;
+}
+</script>
+</body>
+</html>

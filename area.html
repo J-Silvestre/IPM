@@ -151,22 +151,6 @@ body{
   transition: opacity 0.5s ease;
 }
 
-.footer-title{
-  font-weight:600;
-  color:var(--accent);
-  background:#f2f5ff;
-  padding:8px 12px;
-  border-radius:999px;
-  display:inline-block;
-  margin-bottom:16px;
-  opacity:0.4;
-  transition: opacity 0.5s ease;
-}
-
-.footer-title.visible{
-  opacity:1;
-}
-
 .navbar{
   display:flex;
   justify-content:space-around;
@@ -202,6 +186,30 @@ body{
 
 .nav-item span{
   font-size:20px;
+}
+
+/* Benefícios button */
+#beneficiosBtn {
+  background:#2a6bf6;
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:12px 18px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  width:100%;
+  margin-bottom:16px;
+  transition: all 0.3s ease;
+  opacity:0.4;             /* <-- starts faded */
+  pointer-events:none;      /* <-- not clickable yet */
+}
+#beneficiosBtn.active {
+  opacity:1;
+  pointer-events:auto;      /* <-- becomes clickable */
+}
+#beneficiosBtn:hover {
+  background:#1e57cc;
 }
 </style>
 </head>
@@ -245,16 +253,18 @@ body{
 
     <!-- Footer -->
     <div class="footer">
-      <div class="footer-title" id="benefitsTitle">(Benefícios & Penalizações)</div>
+
+      <button id="beneficiosBtn">Benefícios e Penalizações</button>
+
       <div class="navbar">
         <div class="nav-item">
-          <button onclick="alert('Abrir perfil')">
+          <button onclick="location.href='perfil.html'">
             <span>👤</span>
             <div>perfil</div>
           </button>
         </div>
         <div class="nav-item">
-          <button onclick="alert('Abrir mensagens')">
+          <button onclick="location.href='messages.html'">
             <span>💬</span>
             <div>mensagens</div>
           </button>
@@ -267,17 +277,28 @@ body{
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-  const mapBox = document.getElementById('mapBox');
-  const benefitsTitle = document.getElementById('benefitsTitle');
+const mapBox = document.getElementById('mapBox');
+const beneficiosBtn = document.getElementById('beneficiosBtn');
 
-  mapBox.addEventListener('click', () => {
-    benefitsTitle.classList.add('visible');
-  });
+// When the user clicks on the map, activate the button
+mapBox.addEventListener('click', () => {
+  beneficiosBtn.classList.add('active');
+});
+
+beneficiosBtn.addEventListener('click', () => {
+  const concelho = document.getElementById('concelho').value;
+  const mapVisible = window.getComputedStyle(mapBox).display !== 'none';
+
+  if (concelho === "Escolha um concelho" && mapVisible) {
+    alert("Por favor, selecione um concelho primeiro.");
+  } else {
+    location.href = `bens-pens.html?concelho=${encodeURIComponent(concelho)}`;
+  }
+});
 </script>
 
 </body>

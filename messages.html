@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages</title>
+<style>
+body{
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #f3f4f7;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.container{
+  width:100%;
+  max-width:420px;
+  min-height:100vh;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(26,32,50,0.08);
+  border-radius:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.header{
+  background:#2a6bf6;
+  color:#fff;
+  text-align:center;
+  padding:16px;
+  font-size:20px;
+  font-weight:600;
+}
+.chat-list{
+  padding:12px 20px;
+}
+.chat{
+  background:#f7f8fc;
+  padding:14px 16px;
+  border-radius:12px;
+  margin-bottom:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.05);
+  cursor:pointer;
+  transition:transform 0.15s;
+}
+.chat:hover{
+  transform:scale(1.02);
+}
+.chat strong{
+  display:block;
+  font-size:16px;
+  color:#333;
+}
+.chat span{
+  color:#7b7f86;
+  font-size:14px;
+}
+.back{
+  position:absolute;
+  left:12px;
+  top:14px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back" onclick="location.href='index.html'">⬅</button>
+      Messages
+    </div>
+
+    <div class="chat-list">
+      <div class="chat"><strong>Arquiteto 1</strong><span>Enviei-lhe as plantas atualizadas.</span></div>
+      <div class="chat"><strong>Ana</strong><span>Olá! Tudo bem?</span></div>
+      <div class="chat"><strong>João</strong><span>Podemos falar amanhã?</span></div>
+      <div class="chat"><strong>Sara</strong><span>Enviei o documento!</span></div>
+    </div>
+  </div>
+</body>
+</html>
