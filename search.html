@@ -36,19 +36,87 @@
       });
     };
   </script>
+  <style>
+    body {
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: #f3f4f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .app {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      background: #fff;
+      box-shadow: 0 6px 20px rgba(26,32,50,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .top-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon-btn {
+      all: unset;
+      cursor: pointer;
+      color: #2a6bf6;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      border: none;
+      outline: none;
+      font-size: 16px;
+      width: 100%;
+      background: transparent;
+    }
+    #lista {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .input {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f7f8fc;
+      padding: 12px 14px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.15s;
+    }
+    .input:hover {
+      transform: scale(1.02);
+      background: #eef1ff;
+    }
+  </style>
 </head>
 
 <body>
   <div class="app">
     <div class="card">
       <div class="top-icons">
-        <button class="icon-btn" onclick="history.back()" aria-label="Voltar">←</button>
+        <button class="icon-btn" onclick="location.href='area.html'" aria-label="Voltar">←</button>
         <div style="display:flex;align-items:center;gap:6px;flex:1;max-width:300px;">
-          🔍 <input type="text" placeholder="Procurar" style="border:none;outline:none;font-size:16px;width:100%;background:transparent;">
+          🔍 
+          <input type="text" placeholder="Procurar">
         </div>
       </div>
 
-      <div id="lista" style="display:flex;flex-direction:column;gap:12px;margin-top:18px;"></div>
+      <div id="lista"></div>
     </div>
   </div>
 </body>
