@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messages</title>
+<title>Mensagens</title>
 <style>
 body{
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -31,6 +31,12 @@ body{
   padding:16px;
   font-size:20px;
   font-weight:600;
+}
+.header button {
+  all: unset;
+  cursor: pointer;
+  color: var(--accent, #fff);
+  font-size: 18px;
 }
 .chat-list{
   padding:12px 20px;
@@ -71,8 +77,8 @@ body{
 <body>
   <div class="container">
     <div class="header">
-      <button class="back" onclick="location.href='index.html'">⬅</button>
-      Messages
+      <button onclick="location.href='area.html'">⬅</button>
+      Mensagens
     </div>
 
     <div class="chat-list">
@@ -81,6 +87,7 @@ body{
       <div class="chat"><strong>João</strong><span>Podemos falar amanhã?</span></div>
       <div class="chat"><strong>Sara</strong><span>Enviei o documento!</span></div>
     </div>
+
   </div>
 </body>
 </html>
