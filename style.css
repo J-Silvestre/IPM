@@ -3,8 +3,9 @@
   --bg: #f6f6f9;
   --card: #ffffff;
   --primary: #00b894;         /* green */
-  --primary-soft: #e8fbf0;     /* ultra-light green for backgrounds */
-  --muted: #6e6e73;            /* iOS-style muted text */
+  --primary-soft: #e8fbf0;
+  --secondary: #000000; 
+  --muted: #6e6e73;            
   --danger: #e74c3c;
   --radius: 20px;
   --pad: 18px;
@@ -23,6 +24,13 @@ body{
   align-items:center;
   justify-content:center;
   padding:20px;
+}
+
+/* Global link style */
+a.app-link {
+  color: var(--secondary);
+  font-style: italic;
+  text-decoration: underline;
 }
 
 /* App container */
@@ -225,6 +233,7 @@ body{
   --card: #232336;
   --primary: #00b894; /* slightly brighter green */
   --primary-soft: #f1fff8;     /* lighter green-tinted background */
+  --secondary: #f1fff8; 
   --muted: #b2b2c3;
   --danger: #ff7675;
   --shadow: 0 6px 22px rgba(28, 28, 40, 0.32);
