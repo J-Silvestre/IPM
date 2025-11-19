@@ -3,21 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>App — Criar Conta</title>
   <link rel="stylesheet" href="style.css">
+  <script src="scripts/theme.js" defer></script>
 </head>
 <body>
   <div class="app">
     <div class="card" role="main" aria-labelledby="createTitle">
-      <div class="top-icons">
-        <button class="icon-btn" onclick="history.back()" aria-label="Voltar">←</button>
-        <div style="font-weight:700">Criar Conta</div>
-        <div style="width:44px"></div>
-      </div>
+      
+      <div class="header">
+      <button class="help-btn" onclick="window.location.href='index.html'">⬅</button>
+       <h2>Criação de Conta</h2>
+    </div>
 
-      <h2 id="createTitle" style="margin-top:6px;margin-bottom:6px">Criação de conta</h2>
-
-      <form id="createForm" onsubmit="event.preventDefault(); alert('Conta criada (simulação)'); location.href='area.html';">
+      <form id="createForm" onsubmit="handleSubmit(event)">
         <div class="form-group">
           <div class="label">Nome completo</div>
           <div class="input"><input name="nome" required placeholder="João da Silva"></div>
@@ -26,52 +24,98 @@
         <div class="row">
           <div class="form-group small">
             <div class="label">Entidade</div>
-            <div class="input"><input name="entidade" placeholder="Associação / Empresa"></div>
+            <div class="input">
+              <select id="entidadeSelect" name="entidade">
+                <option value="">-- seleciona --</option>
+                <option value="Proprietario">Proprietário</option>
+                <option value="Empreiteiro">Empreiteiro</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group small">
-            <div class="label">NIF / NIPC</div>
-            <div class="input"><input name="nif" placeholder="123456789"></div>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="label">Morada</div>
-          <div class="input"><input name="morada" placeholder="Rua Exemplo 123"></div>
+          <div class="form-group small" id="categoriaWrapper" style="display:none;">
+            <div class="label">Categoria</div>
+            <div class="input">
+              <select id="categoriaSelect" name="categoria">
+                <option value="">-- seleciona categoria --</option>
+                <option>Arquiteto</option>
+                <option>Canalizador</option>
+                <option>Carpinteiro</option>
+                <option>Eletricista</option>
+                <option>Engenheiro</option>
+                <option>Pedreiro</option>
+                <option>Pintor</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div class="row">
           <div class="form-group small">
-            <div class="label">Concelhos (proc/selecionar)</div>
-            <div class="input"><input name="concelho" placeholder="Ex.: Lisboa"></div>
+            <div class="label">Morada</div>
+            <div class="input"><input name="morada" placeholder="Rua Exemplo 123"></div>
           </div>
           <div class="form-group small">
-            <div class="label">Telefone & Email</div>
-            <div class="input"><input name="contacto" placeholder="+351 9xx xxx xxx / e-mail"></div>
+            <div class="label">Código Postal</div>
+            <div class="input"><input name="codpostal" placeholder="1000-001"></div>
           </div>
         </div>
 
         <div class="form-group">
-          <div class="label">Categoria (opcional)</div>
+          <div class="label">NIF / NIPC</div>
+          <div class="input"><input name="nif" placeholder="123456789"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="label">Telemóvel</div>
+          <div class="input"><input name="telemovel" placeholder="+351 9xx xxx xxx"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="label">Concelho</div>
           <div class="input">
-            <select name="categoria">
-              <option value="">-- seleciona --</option>
-              <option>Produtor</option>
-              <option>Voluntário</option>
-              <option>Empresa</option>
+            <select name="concelho">
+              <option value="">-- selecionar concelho --</option>
+              <option>Lisboa</option>
+              <option>Amadora</option>
+              <option>Oeiras</option>
+              <option>Cascais</option>
+              <option>Sintra</option>
+              <option>Loures</option>
+              <option>Odivelas</option>
+              <option>Vila Franca de Xira</option>
+              <option>Mafra</option>
+              <option>Almada</option>
+              <option>Seixal</option>
+              <option>Barreiro</option>
+              <option>Moita</option>
+              <option>Montijo</option>
+              <option>Alcochete</option>
+              <option>Palmela</option>
+              <option>Sesimbra</option>
+              <option>Setúbal</option>
             </select>
           </div>
         </div>
 
-        <div style="display:flex;gap:10px;margin-top:8px;">
-          <button class="btn btn-primary" type="submit">Criar Conta</button>
-          <button class="btn btn-ghost" type="button" onclick="location.href='login.html'">Cancelar</button>
+        <div class="form-group">
+          <div class="label">E-mail</div>
+          <div class="input"><input type="email" name="email" placeholder="teu@exemplo.com"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="label">Password</div>
+          <div class="input"><input type="password" name="password" placeholder="••••••••"></div>
+        </div>
+
+        <div class="flex-row mt-8">
+          <button id="createBtn" class="btn btn-primary" type="submit" disabled aria-disabled="true">Criar Conta</button>
+          <button class="btn btn-ghost" type="button" onclick="location.href='index.html'">Cancelar</button>
         </div>
       </form>
-
-      <div style="margin-top:16px;color:var(--muted);font-size:13px">
-        Campos fictícios para protótipo.
-      </div>
     </div>
   </div>
+
+  <script src="scripts/account.js" defer></script>
 </body>
 </html>

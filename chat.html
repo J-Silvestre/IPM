@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chat</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts/theme.js" defer></script>
+  <script>
+    // Determina o nome do contacto com base no índice vindo de arquitetos.html (?i=0,1,2,...)
+    function getContactName() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const i = parseInt(params.get('i'), 10);
+        if (!isNaN(i)) {
+          return "Arquiteto " + (i + 1);
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      return "Contacto";
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatMessage');
+      const chatWindow = document.getElementById('chatWindow');
+      if (!input || !chatWindow) return;
+
+      const text = (input.value || "").trim();
+      if (!text) return;
+
+      const bubble = document.createElement('div');
+      bubble.style.alignSelf = 'flex-end';
+      bubble.style.background = 'var(--primary-soft)';
+      bubble.style.borderRadius = '16px';
+      bubble.style.padding = '8px 12px';
+      bubble.style.marginTop = '6px';
+      bubble.style.maxWidth = '80%';
+      bubble.style.fontSize = '14px';
+      bubble.textContent = text;
+
+      chatWindow.appendChild(bubble);
+      input.value = '';
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const titleEl = document.getElementById('chatTitle');
+      if (titleEl) titleEl.textContent = getContactName();
+
+      const input = document.getElementById('chatMessage');
+      const form = document.getElementById('chatForm');
+
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          sendChatMessage();
+        });
+      }
+
+      if (input) {
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+          }
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="card" role="main" aria-labelledby="chatTitle" style="justify-content:flex-start;">
+      <div class="header">
+        <button class="btn btn-primary" type="button" onclick="location.href='arquitetos.html'">←</button>
+        <h2 id="chatTitle">Contacto</h2>
+      </div>
+
+      <!-- Janela de mensagens -->
+      <div id="chatWindow"
+           style="margin-top:12px; flex:1; min-height:0; display:flex; flex-direction:column; overflow-y:auto;">
+      </div>
+
+      <!-- Caixa de escrita + botão enviar -->
+      <form id="chatForm" style="margin-top:12px; display:flex; gap:8px;">
+        <div class="input" style="flex:1;">
+          <input id="chatMessage" type="text" placeholder="Escreve a tua mensagem...">
+        </div>
+        <button class="btn btn-primary" type="submit">Enviar</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

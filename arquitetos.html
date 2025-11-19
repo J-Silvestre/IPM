@@ -5,41 +5,48 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Arquitetos</title>
   <link rel="stylesheet" href="style.css">
+  <script src="scripts/theme.js" defer></script>
   <script>
     const arquitetos = [
       { nome: "Arquiteto 1" },
       { nome: "Arquiteto 2" },
       { nome: "Arquiteto 3" }
     ];
-    window.onload = () => {
+
+    window.addEventListener('DOMContentLoaded', () => {
       const lista = document.getElementById('lista');
+      if (!lista) return;
+
       arquitetos.forEach((a, i) => {
         const item = document.createElement('div');
         item.className = 'input';
         item.style.cursor = 'pointer';
+        item.style.alignItems = 'center';
+        item.style.fontWeight = '500';
+        item.style.marginTop = '8px'; // espaço vertical entre itens
         item.innerHTML = `
           <span>${a.nome}</span>
           <span style="margin-left:auto;display:flex;gap:8px;">
-            <button class="icon-btn" style="width:32px;height:32px;" onclick="verPerfil(${i})">👁</button>
+               <button class="icon-btn" style="width:32px;height:32px;" onclick="verPerfil(${i})">👁</button>
             <button class="icon-btn" style="width:32px;height:32px;" onclick="abrirChat(${i})">💬</button>
           </span>
         `;
         lista.appendChild(item);
       });
-    };
+    });
+
     function verPerfil(i){ location.href='architect-profiles.html?i='+i; }
     function abrirChat(i){ location.href='chat.html?i='+i; }
   </script>
 </head>
 <body>
   <div class="app">
-    <div class="card">
-      <div class="top-icons">
-        <button class="icon-btn" onclick="location.href='search.html'">←</button>
-        <div style="font-weight:700;">ARQUITETOS</div>
-        <div style="width:44px"></div>
+    <div class="card" role="main" aria-labelledby="architectsTitle" style="justify-content:flex-start;">
+      <div class="header">
+        <button class="btn btn-primary" onclick="location.href='search.html'">←</button>
+        <h2 id="architectsTitle">Arquitetos</h2>
       </div>
-      <div id="lista" style="display:flex;flex-direction:column;gap:12px;margin-top:18px;"></div>
+      <div id="lista" style="margin-top:0;"></div>
     </div>
   </div>
 </body>

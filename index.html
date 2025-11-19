@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>App Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts/login.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <div class="card" role="main" aria-labelledby="loginTitle">
+      <div class="top-icons">
+        <button class="icon-btn" aria-label="Alternar tema" onclick="toggleTheme()" type="button" style="box-shadow:0 2px 8px rgba(28,28,40,0.10);border:none;">
+          <span id="themeToggleIcon">�~?��?</span>
+        </button>
+        <button class="icon-btn" aria-label="Ajuda" type="button" onclick="toggleHelp()" style="box-shadow:0 2px 8px rgba(28,28,40,0.10);border:none;"><span class="help-icon">?</span></button>
+      </div>
+
+      <!-- Brand image (single image PDM1) -->
+      <img id="brandImage" src="resources/PDM1.png" alt="PDM">
+
+      <div class="center-box">
+        <div class="form-group">
+          <div class="label">E-mail</div>
+          <div class="input">
+            <input type="email" id="email" placeholder="teu@exemplo.com" autocomplete="email">
+          </div>
+        </div>
+
+        <!-- Help dialog (hidden by default) -->
+        <div id="helpPanel" class="help-panel" role="dialog" aria-hidden="true" aria-label="Informações sobre PDM+">
+          <div class="help-content">
+            <button class="help-close" aria-label="Fechar" onclick="toggleHelp()">?</button>
+            <p>O PDM+ é uma aplicação desenvolvida com o intuito de facilitar a comunicação entre proprietários e empreiteiros para desenvolver ou renovar habitações contidas nas ARUs dos Planos de Desenvolvimento Municipal dos respetivos concelhos da Área Metropolitana de Lisboa.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label">Password</div>
+          <div class="input">
+            <input type="password" id="password" placeholder="password" autocomplete="current-password">
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="button" onclick="login()">Iniciar Sessão</button>
+
+        <button class="btn btn-ghost" onclick="location.href='account-creation.html'">Criar Conta</button>
+
+        <div id="mensagem" style="margin-top:10px;text-align:center;font-size:13px;color:var(--muted);"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
