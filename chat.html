@@ -7,21 +7,89 @@
   <link rel="stylesheet" href="style.css">
   <script src="scripts/theme.js" defer></script>
   <script>
+    const STORAGE_KEY = 'conversations';
+
+    function loadConversations() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveConversations(conversations) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
+
+    function getContactId() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const raw = params.get('i');
+        return raw !== null ? String(raw) : 'manual';
+      } catch (e) {
+        return 'manual';
+      }
+    }
+
     // Determina o nome do contacto com base no índice vindo de arquitetos.html (?i=0,1,2,...)
-    function getContactName() {
+    function getContactName(contactId) {
+      const conversations = loadConversations();
+      const saved = conversations.find(c => c.id === contactId);
+      if (saved && saved.name) return saved.name;
+
       try {
         const params = new URLSearchParams(location.search);
         const i = parseInt(params.get('i'), 10);
-        if (!isNaN(i)) {
-          return "Arquiteto " + (i + 1);
-        }
+        if (!isNaN(i)) return "Arquiteto " + (i + 1);
       } catch (e) {
         /* ignore */
       }
       return "Contacto";
     }
 
-    function sendChatMessage() {
+    function ensureConversation(contactId, contactName) {
+      const conversations = loadConversations();
+      let conversation = conversations.find(c => c.id === contactId);
+
+      if (!conversation) {
+        conversation = { id: contactId, name: contactName, messages: [] };
+        conversations.push(conversation);
+        saveConversations(conversations);
+      } else if (contactName && conversation.name !== contactName) {
+        conversation.name = contactName;
+        saveConversations(conversations);
+      }
+
+      return { conversation, conversations };
+    }
+
+    function createBubble(message) {
+      const bubble = document.createElement('div');
+      const fromUser = message.from !== 'architect';
+      bubble.style.alignSelf = fromUser ? 'flex-end' : 'flex-start';
+      bubble.style.background = fromUser ? 'var(--primary-soft)' : 'var(--surface)';
+      bubble.style.borderRadius = '16px';
+      bubble.style.padding = '8px 12px';
+      bubble.style.marginTop = '6px';
+      bubble.style.maxWidth = '80%';
+      bubble.style.fontSize = '14px';
+      bubble.textContent = message.text;
+      return bubble;
+    }
+
+    function renderHistory(contactId, contactName) {
+      const chatWindow = document.getElementById('chatWindow');
+      if (!chatWindow) return;
+
+      chatWindow.innerHTML = '';
+      const { conversation } = ensureConversation(contactId, contactName);
+      conversation.messages.forEach(msg => {
+        chatWindow.appendChild(createBubble(msg));
+      });
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function sendChatMessage(contactId, contactName) {
       const input = document.getElementById('chatMessage');
       const chatWindow = document.getElementById('chatWindow');
       if (!input || !chatWindow) return;
@@ -29,24 +97,24 @@
       const text = (input.value || "").trim();
       if (!text) return;
 
-      const bubble = document.createElement('div');
-      bubble.style.alignSelf = 'flex-end';
-      bubble.style.background = 'var(--primary-soft)';
-      bubble.style.borderRadius = '16px';
-      bubble.style.padding = '8px 12px';
-      bubble.style.marginTop = '6px';
-      bubble.style.maxWidth = '80%';
-      bubble.style.fontSize = '14px';
-      bubble.textContent = text;
+      const { conversation, conversations } = ensureConversation(contactId, contactName);
+      const message = { from: 'user', text, ts: Date.now() };
+      conversation.messages.push(message);
+      saveConversations(conversations);
 
-      chatWindow.appendChild(bubble);
+      chatWindow.appendChild(createBubble(message));
       input.value = '';
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      const contactId = getContactId();
+      const contactName = getContactName(contactId);
+
       const titleEl = document.getElementById('chatTitle');
-      if (titleEl) titleEl.textContent = getContactName();
+      if (titleEl) titleEl.textContent = contactName;
+
+      renderHistory(contactId, contactName);
 
       const input = document.getElementById('chatMessage');
       const form = document.getElementById('chatForm');
@@ -54,7 +122,7 @@
       if (form) {
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          sendChatMessage();
+          sendChatMessage(contactId, contactName);
         });
       }
 
@@ -62,7 +130,7 @@
         input.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            sendChatMessage();
+            sendChatMessage(contactId, contactName);
           }
         });
       }
@@ -73,7 +141,7 @@
   <div class="app">
     <div class="card" role="main" aria-labelledby="chatTitle" style="justify-content:flex-start;">
       <div class="header">
-        <button class="btn btn-primary" type="button" onclick="location.href='area.html'">←</button>
+        <button class="btn btn-primary" type="button" onclick="location.href='area.html'">&#8592;</button>
         <h2 id="chatTitle">Contacto</h2>
       </div>
 

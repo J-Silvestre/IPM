@@ -35,5 +35,50 @@
       </div>
     </div>
   </div>
+  <script>
+    (function () {
+      const STORAGE_KEY = 'conversations';
+
+      function loadConversations() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function getLastTimestamp(conversation) {
+        const last = conversation && conversation.messages && conversation.messages[conversation.messages.length - 1];
+        return last && typeof last.ts === 'number' ? last.ts : 0;
+      }
+
+      function renderSavedConversations() {
+        const list = document.querySelector('.chat-list');
+        if (!list) return;
+
+        const conversations = loadConversations();
+        if (!conversations.length) return;
+
+        conversations
+          .slice()
+          .sort((a, b) => getLastTimestamp(b) - getLastTimestamp(a))
+          .forEach(conv => {
+            const last = conv.messages && conv.messages.length ? conv.messages[conv.messages.length - 1].text : '';
+            const preview = (last || '').trim() || 'Sem mensagens';
+
+            const btn = document.createElement('button');
+            btn.className = 'input chat';
+            btn.type = 'button';
+            btn.onclick = () => { location.href = 'chat.html?i=' + encodeURIComponent(conv.id); };
+            btn.innerHTML = `<strong>${conv.name || 'Contacto'}</strong>
+              <span style="margin-left:8px; color:var(--muted);">${preview}</span>`;
+
+            list.appendChild(btn);
+          });
+      }
+
+      document.addEventListener('DOMContentLoaded', renderSavedConversations);
+    })();
+  </script>
 </body>
 </html>
