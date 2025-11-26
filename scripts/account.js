@@ -1,5 +1,5 @@
 // Account-creation related behavior moved from account-creation.html
-(function(){
+(function () {
   // Gather elements (some may be missing during dev; don't fail loudly)
   const ent = document.getElementById('entidadeSelect');
   const wrapper = document.getElementById('categoriaWrapper');
@@ -11,60 +11,77 @@
   status.style.color = 'var(--muted)';
   status.style.fontSize = '13px';
   status.id = 'formStatus';
-  if(form) form.appendChild(status);
+  if (form) form.appendChild(status);
 
-  if(!form){ console.warn('createForm not found'); return; }
+  if (!form) {
+    console.warn('createForm not found');
+    return;
+  }
 
   const email = form.elements['email'] || null;
   const password = form.elements['password'] || null;
   const concelho = form.elements['concelho'] || null;
 
-  function showCategory(show){
-    if(!wrapper) return;
-    wrapper.style.display = show ? 'block' : 'none';
-    if(!show && categoria) categoria.value = '';
+  function getCategoriaValues(el) {
+    if (!el) return [];
+    if (el.selectedOptions) {
+      return Array.from(el.selectedOptions)
+        .map(o => (o.value || '').trim())
+        .filter(Boolean);
+    }
+    const val = (el.value || '').trim();
+    return val ? [val] : [];
   }
 
-  function validateForm(){
-    // safe reads
+  function clearCategoria() {
+    if (!categoria) return;
+    Array.from(categoria.options || []).forEach(o => (o.selected = false));
+  }
+
+  function showCategory(show) {
+    if (!wrapper) return;
+    wrapper.style.display = show ? 'block' : 'none';
+    if (!show) clearCategoria();
+  }
+
+  function validateForm() {
     const emailVal = (email && email.value || '').trim();
     const passVal = (password && password.value || '').trim();
     const concVal = (concelho && concelho.value || '').trim();
     const entVal = (ent && ent.value || '').trim();
-    const catVal = (categoria && categoria.value || '').trim();
+    const catVals = getCategoriaValues(categoria);
 
     const basic = emailVal !== '' && passVal !== '' && concVal !== '' && entVal !== '';
-    const ok = basic && (entVal !== 'Empreiteiro' || catVal !== '');
+    const ok = basic && (entVal !== 'Empreiteiro' || catVals.length > 0);
 
-    if(btn){
+    if (btn) {
       btn.disabled = !ok;
       btn.setAttribute('aria-disabled', String(!ok));
     }
 
-    // human readable status for debugging/feedback
-    if(!basic){
-      status.textContent = 'Preencha E-mail, Password, Entidade e Concelho para activar o botão.';
-    } else if(entVal === 'Empreiteiro' && catVal === ''){
-      status.textContent = 'Se seleccionou Empreiteiro, escolha também a Categoria.';
+    if (!basic) {
+      status.textContent = 'Preencha E-mail, Password, Entidade e Concelho para activar o botao.';
+    } else if (entVal === 'Empreiteiro' && catVals.length === 0) {
+      status.textContent = 'Se seleccionou Empreiteiro, escolha pelo menos uma Categoria.';
     } else {
       status.textContent = '';
     }
 
-    console.debug('validateForm', {emailVal, passVal, concVal, entVal, catVal, ok});
+    console.debug('validateForm', { emailVal, passVal, concVal, entVal, catVals, ok });
     return ok;
   }
 
-  function update(){
-    if(ent) showCategory(ent.value === 'Empreiteiro');
+  function update() {
+    if (ent) showCategory(ent.value === 'Empreiteiro');
     return validateForm();
   }
 
   // attach listeners defensively
-  if(ent) ent.addEventListener('change', update);
-  if(categoria) categoria.addEventListener('change', validateForm);
-  if(concelho) concelho.addEventListener('change', validateForm);
-  if(email) email.addEventListener('input', validateForm);
-  if(password) password.addEventListener('input', validateForm);
+  if (ent) ent.addEventListener('change', update);
+  if (categoria) categoria.addEventListener('change', validateForm);
+  if (concelho) concelho.addEventListener('change', validateForm);
+  if (email) email.addEventListener('input', validateForm);
+  if (password) password.addEventListener('input', validateForm);
 
   // also watch other selects inside form (in case names differ)
   Array.from(form.querySelectorAll('select')).forEach(s => s.addEventListener('change', validateForm));
@@ -72,39 +89,51 @@
   // initialize
   update();
 
-  // helper: save account (email + password) into localStorage under 'accounts'
-  function saveAccount(form){
-    try{
-      const emailField = form.elements['email'];
-      const passwordField = form.elements['password'];
-      const email = emailField ? (emailField.value || '').trim().toLowerCase() : '';
-      const password = passwordField ? (passwordField.value || '') : '';
-      if(!email || !password) return;
+  // helper: save all account fields into localStorage under 'accounts'
+  function saveAccount(form) {
+    try {
+      const fields = [
+        'nome', 'morada', 'codpostal', 'nif', 'telemovel',
+        'concelho', 'email', 'password', 'entidade', 'categoria'
+      ];
+      const data = {};
+      fields.forEach(name => {
+        const el = form.elements[name];
+        if (!el) return;
+
+        if (name === 'categoria') {
+          data[name] = (data.entidade || '').trim() === 'Empreiteiro' ? getCategoriaValues(el) : [];
+          return;
+        }
+
+        const val = el.value || '';
+        data[name] = name === 'email' ? val.trim().toLowerCase() : val.trim();
+      });
+
+      const email = data.email || '';
+      if (!email) return;
+
       const stored = JSON.parse(localStorage.getItem('accounts') || '[]');
-      const existing = stored.find(a => a.email === email);
-      if(existing){
-        // update password for existing email
-        existing.password = password;
+      const existing = stored.find(a => (a.email || '').toLowerCase() === email);
+      if (existing) {
+        Object.assign(existing, data);
       } else {
-        stored.push({ email, password });
+        stored.push(data);
       }
       localStorage.setItem('accounts', JSON.stringify(stored));
-    }catch(err){
+    } catch (err) {
       console.warn('Failed to save account to localStorage', err);
     }
   }
 
   // submission handler
-  window.handleSubmit = function(e){
+  window.handleSubmit = function (e) {
     e.preventDefault();
-    if(!validateForm()){
-      alert('Por favor, preencha todos os campos obrigatórios.');
+    if (!validateForm()) {
+      alert('Por favor, preencha todos os campos obrigatorios.');
       return;
     }
-    // persist credentials (email + password) locally
     saveAccount(form);
-    // proceed: redirect to login page (no popup)
     location.href = 'index.html';
   };
-
 })();

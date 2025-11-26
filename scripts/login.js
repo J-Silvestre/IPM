@@ -5,6 +5,22 @@ const contasValidas = [
   { email: "joao@empresa.pt", password: "senha" }
 ];
 
+function ensureStoredAccount(email, password) {
+  if (!email) return;
+  try {
+    const stored = JSON.parse(localStorage.getItem('accounts') || '[]');
+    const existing = stored.find(a => (a.email || '').toLowerCase() === email);
+    if (existing) {
+      if (password) existing.password = password;
+    } else {
+      stored.push({ email, password: password || '' });
+    }
+    localStorage.setItem('accounts', JSON.stringify(stored));
+  } catch (e) {
+    console.warn('Failed to persist account', e);
+  }
+}
+
 // Enable/disable "Iniciar Sessão" based on form contents
 function validateLoginForm() {
   const emailInput = document.getElementById('email');
@@ -39,6 +55,8 @@ function login() {
   const contaLocal = storedAccounts.find(c => c.email === email && c.password === password);
 
   if (conta || contaLocal) {
+    localStorage.setItem('currentUserEmail', email);
+    if(!contaLocal && conta) ensureStoredAccount(email, password);
     if(msg){ msg.style.color = "green"; msg.textContent = "Login bem-sucedido! A redirecionar..."; }
     setTimeout(() => { location.href = "area.html"; }, 800);
   } else {

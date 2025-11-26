@@ -123,6 +123,19 @@ a.app-link {
   font-size:16px;
   background:transparent;
 }
+.input.multi-select{
+  height:auto;
+  align-items:flex-start;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+.input select[multiple]{
+  height:auto;
+  min-height:140px;
+  padding-top:6px;
+  padding-bottom:6px;
+  line-height:1.35;
+}
 
 /* Buttons - now violet palette */
 .btn {

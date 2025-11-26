@@ -11,6 +11,11 @@
       const params = new URLSearchParams(location.search);
       const i = params.get('i') || 0;
       document.getElementById('titulo').textContent = "Arquiteto " + (parseInt(i)+1);
+      // Tornar todos os campos apenas leitura neste detalhe
+      document.querySelectorAll('input, textarea').forEach(el => {
+        el.readOnly = true;
+        el.setAttribute('aria-readonly', 'true');
+      });
     };
   </script>
   <script src="scripts/theme.js" defer></script>
@@ -25,13 +30,13 @@
       </div>
 
       <div class="form-group"><div class="label">Nome Completo</div><div class="input"><input value="Arquiteto Exemplo"></div></div>
-      <div class="form-group"><div class="label">Entidade</div><div class="input"><input value="Estúdio Design+"></div></div>
+      <div class="form-group"><div class="label">Entidade</div><div class="input"><input value="MILOBRAS"></div></div>
       <div class="form-group"><div class="label">NIF / NIPC</div><div class="input"><input value="123456789"></div></div>
-      <div class="form-group"><div class="label">Morada</div><div class="input"><input value="Rua dos Projetos, 45"></div></div>
-      <div class="form-group"><div class="label">Concelhos</div><div class="input"><input value="Lisboa, Cascais"></div></div>
+      <div class="form-group"><div class="label">Morada</div><div class="input"><input value="Bela Vista Office, Estr. de Paço de Arcos 66, 2735-308"></div></div>
+      <div class="form-group"><div class="label">Concelhos</div><div class="input"><input value="Agualva-Cacém, Sintra"></div></div>
       <div class="form-group"><div class="label">Telemóvel</div><div class="input"><input value="+351 912 345 678"></div></div>
-      <div class="form-group"><div class="label">Email</div><div class="input"><input value="arquiteto@exemplo.pt"></div></div>
-      <div class="form-group"><div class="label">Categoria</div><div class="input"><input value="Arquiteto"></div></div>
+      <div class="form-group"><div class="label">Email</div><div class="input"><input value="milobras@exemplo.pt"></div></div>
+      <div class="form-group"><div class="label">Categorias</div><div class="input"><input value="Arquiteto, Engenheiro"></div></div>
 
       <div class="form-group">
         <div class="label">Breve descrição</div>

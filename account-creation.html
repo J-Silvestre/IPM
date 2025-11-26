@@ -35,9 +35,8 @@
 
           <div class="form-group small" id="categoriaWrapper" style="display:none;">
             <div class="label">Categoria</div>
-            <div class="input">
-              <select id="categoriaSelect" name="categoria">
-                <option value="">-- seleciona categoria --</option>
+            <div class="input multi-select">
+              <select id="categoriaSelect" name="categoria" multiple size="7" aria-label="Selecione uma ou mais categorias">
                 <option>Arquiteto</option>
                 <option>Canalizador</option>
                 <option>Carpinteiro</option>
@@ -108,7 +107,7 @@
           <div class="input"><input type="password" name="password" placeholder="••••••••"></div>
         </div>
 
-        <div class="flex-row mt-8">
+        <div class="flex-row mt-8" style="margin-top:18px; gap:10px;">
           <button id="createBtn" class="btn btn-primary" type="submit" disabled aria-disabled="true">Criar Conta</button>
           <button class="btn btn-ghost" type="button" onclick="location.href='index.html'">Cancelar</button>
         </div>

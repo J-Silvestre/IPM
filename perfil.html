@@ -11,7 +11,7 @@
   <div class="app">
     <div class="card" role="main" aria-labelledby="profileTitle" style="justify-content:flex-start;">
       <div class="header">
-        <button class="btn btn-primary" onclick="window.location.href='area.html'">←</button>
+        <button class="btn btn-primary" onclick="window.location.href='area.html'">&#8592;</button>
         <h2 id="profileTitle">Perfil</h2>
       </div>
 
@@ -56,12 +56,145 @@
           <div class="input"><input type="password" name="password" value=""></div>
         </div>
 
-        <div class="footer">
-          <button class="btn btn-primary" type="submit">Guardar</button>
-          <button class="btn btn-ghost" type="button" onclick="location.href='area.html'">Cancelar</button>
+        <div class="form-group" id="categoriaGroup" style="display:none; margin-top:12px;">
+          <div class="label">Categoria (Empreiteiro)</div>
+          <div class="input multi-select">
+            <select name="categoria" id="categoriaSelect" multiple size="7" aria-label="Selecione uma ou mais categorias">
+              <option>Arquiteto</option>
+              <option>Canalizador</option>
+              <option>Carpinteiro</option>
+              <option>Eletricista</option>
+              <option>Engenheiro</option>
+              <option>Pedreiro</option>
+              <option>Pintor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="footer" id="profileActions" style="margin-top:18px; gap:10px;">
+          <button class="btn btn-primary" type="submit" style="width:100%; margin-right:0;">Guardar</button>
+          <button class="btn btn-ghost" type="button" style="width:100%;" onclick="location.href='area.html'">Cancelar</button>
         </div>
       </form>
+      <div id="saveStatus" style="margin-top:8px; color:var(--muted); font-size:13px;"></div>
     </div>
   </div>
+  <script>
+    (function(){
+      const STORAGE_KEY = 'accounts';
+      let isEmpreiteiro = false;
+      const categoriaGroup = document.getElementById('categoriaGroup');
+      const categoriaSelect = document.getElementById('categoriaSelect');
+
+      function normalizeCategoria(val){
+        if(Array.isArray(val)) return val;
+        if(typeof val === 'string'){
+          return val.split(',').map(v => v.trim()).filter(Boolean);
+        }
+        return [];
+      }
+
+      function setCategoria(select, value){
+        if(!select) return;
+        const values = normalizeCategoria(value).map(v => v.toLowerCase());
+        Array.from(select.options || []).forEach(opt => {
+          const optVal = (opt.value || opt.text || '').trim().toLowerCase();
+          opt.selected = values.includes(optVal);
+        });
+      }
+
+      function getCategoriaValues(select){
+        if(!select) return [];
+        if(select.selectedOptions){
+          return Array.from(select.selectedOptions).map(o => (o.value || '').trim()).filter(Boolean);
+        }
+        const val = (select.value || '').trim();
+        return val ? [val] : [];
+      }
+
+      function toggleCategory(show){
+        if(categoriaGroup) categoriaGroup.style.display = show ? 'block' : 'none';
+        if(!show && categoriaSelect) setCategoria(categoriaSelect, []);
+      }
+
+      function loadAccounts(){
+        try{
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }catch(e){
+          return [];
+        }
+      }
+
+      function saveAccounts(list){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
+
+      function findAccount(email, list){
+        return list.find(a => (a.email || '').toLowerCase() === email);
+      }
+
+      function fillForm(form, account){
+        if(!account) return;
+        const fields = ['nome','morada','codpostal','nif','telemovel','concelho','email','password','categoria'];
+        fields.forEach(name => {
+          const el = form.elements[name];
+          if(!el) return;
+          if(name === 'categoria'){
+            setCategoria(el, account[name]);
+            return;
+          }
+          el.value = account[name] || '';
+        });
+      }
+
+      function handleSubmit(e){
+        e.preventDefault();
+        const form = e.target;
+        const status = document.getElementById('saveStatus');
+        const emailField = form.elements['email'];
+        const emailVal = emailField ? (emailField.value || '').trim().toLowerCase() : '';
+        if(!emailVal){
+          if(status) status.textContent = 'Preencha o e-mail para guardar.';
+          return;
+        }
+
+        const accounts = loadAccounts();
+        let account = findAccount(emailVal, accounts);
+        if(!account){
+          account = {};
+          accounts.push(account);
+        }
+
+        ['nome','morada','codpostal','nif','telemovel','concelho','email','password','categoria'].forEach(name => {
+          const el = form.elements[name];
+          if(!el) return;
+          if(name === 'categoria'){
+            account[name] = isEmpreiteiro ? getCategoriaValues(categoriaSelect) : [];
+            return;
+          }
+          const val = el.value || '';
+          account[name] = name === 'email' ? val.trim().toLowerCase() : val.trim();
+        });
+
+        saveAccounts(accounts);
+        localStorage.setItem('currentUserEmail', emailVal);
+        if(status) status.textContent = 'Dados guardados com sucesso.';
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('profileForm');
+        if(!form) return;
+        const currentEmail = (localStorage.getItem('currentUserEmail') || '').toLowerCase();
+        const accounts = loadAccounts();
+        const account = currentEmail ? findAccount(currentEmail, accounts) : null;
+        isEmpreiteiro = !!(account && (account.entidade || '').toLowerCase() === 'empreiteiro');
+        fillForm(form, account);
+        if(!account && currentEmail && form.elements['email']) form.elements['email'].value = currentEmail;
+        toggleCategory(isEmpreiteiro);
+
+        form.addEventListener('submit', handleSubmit);
+      });
+    })();
+  </script>
 </body>
 </html>
