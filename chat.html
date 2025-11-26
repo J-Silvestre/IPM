@@ -31,7 +31,7 @@
       }
     }
 
-    // Determina o nome do contacto com base no índice vindo de arquitetos.html (?i=0,1,2,...)
+    // Determina o nome do contacto com base no indice vindo de arquitetos.html (?i=0,1,2,...)
     function getContactName(contactId) {
       const conversations = loadConversations();
       const saved = conversations.find(c => c.id === contactId);
@@ -39,6 +39,8 @@
 
       try {
         const params = new URLSearchParams(location.search);
+        const nameParam = params.get('n');
+        if (nameParam) return nameParam;
         const i = parseInt(params.get('i'), 10);
         if (!isNaN(i)) return "Arquiteto " + (i + 1);
       } catch (e) {
@@ -150,7 +152,7 @@
            style="margin-top:12px; flex:1; min-height:0; display:flex; flex-direction:column; overflow-y:auto;">
       </div>
 
-      <!-- Caixa de escrita + botão enviar -->
+      <!-- Caixa de escrita + botao enviar -->
       <form id="chatForm" style="margin-top:12px; display:flex; gap:8px;">
         <div class="input" style="flex:1;">
           <input id="chatMessage" type="text" placeholder="Escreve a tua mensagem...">

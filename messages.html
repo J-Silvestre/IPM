@@ -11,33 +11,23 @@
   <div class="app">
     <div class="card" role="main" aria-labelledby="messagesTitle" style="justify-content:flex-start;">
       <div class="header">
-        <button class="btn btn-primary" onclick="location.href='area.html'">←</button>
+        <button class="btn btn-primary" onclick="location.href='area.html'">&#8592;</button>
         <h2 id="messagesTitle">Mensagens</h2>
       </div>
 
-      <div class="chat-list" style="margin-top: 8px; display:flex; flex-direction:column; gap:8px;">
-        <button class="input chat" type="button" onclick="location.href='chat.html'">
-          <strong>Arquiteto 1</strong>
-          <span style="margin-left:8px; color:var(--muted);">Enviei-lhe as plantas atualizadas.</span>
-        </button>
-        <button class="input chat" type="button" onclick="location.href='chat.html'">
-          <strong>Ana</strong>
-          <span style="margin-left:8px; color:var(--muted);">Olá! Tudo bem?</span>
-        </button>
-        <button class="input chat" type="button" onclick="location.href='chat.html'">
-          <strong>João</strong>
-          <span style="margin-left:8px; color:var(--muted);">Podemos falar amanhã?</span>
-        </button>
-        <button class="input chat" type="button" onclick="location.href='chat.html'">
-          <strong>Sara</strong>
-          <span style="margin-left:8px; color:var(--muted);">Enviei o documento!</span>
-        </button>
-      </div>
+      <div class="chat-list" style="margin-top: 8px; display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
   <script>
     (function () {
       const STORAGE_KEY = 'conversations';
+      const DELETED_DEFAULT_KEY = 'deletedDefaultConversations';
+      const DEFAULT_CONVERSATIONS = [
+        { id: 'default-1', name: 'Arquiteto 1', preview: 'Enviei-lhe as plantas atualizadas.' },
+        { id: 'default-2', name: 'Ana', preview: 'Ola! Tudo bem?' },
+        { id: 'default-3', name: 'Joao', preview: 'Podemos falar amanha?' },
+        { id: 'default-4', name: 'Sara', preview: 'Enviei o documento!' }
+      ];
 
       function loadConversations() {
         try {
@@ -47,18 +37,89 @@
         }
       }
 
+      function saveConversations(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
+
+      function loadDeletedDefaults() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(DELETED_DEFAULT_KEY) || '[]');
+          return new Set(Array.isArray(parsed) ? parsed : []);
+        } catch (e) {
+          return new Set();
+        }
+      }
+
+      function saveDeletedDefaults(set) {
+        localStorage.setItem(DELETED_DEFAULT_KEY, JSON.stringify(Array.from(set)));
+      }
+
       function getLastTimestamp(conversation) {
         const last = conversation && conversation.messages && conversation.messages[conversation.messages.length - 1];
         return last && typeof last.ts === 'number' ? last.ts : 0;
       }
 
-      function renderSavedConversations() {
+      function createRow({ name, preview, onOpen, onDelete }) {
         const list = document.querySelector('.chat-list');
         if (!list) return;
 
-        const conversations = loadConversations();
-        if (!conversations.length) return;
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.gap = '8px';
 
+        const btn = document.createElement('button');
+        btn.className = 'input chat';
+        btn.type = 'button';
+        btn.style.flex = '1';
+        btn.onclick = onOpen;
+        btn.innerHTML = `<strong>${name || 'Contacto'}</strong>
+          <span style="margin-left:8px; color:var(--muted);">${preview}</span>`;
+
+        const del = document.createElement('button');
+        del.className = 'icon-btn';
+        del.type = 'button';
+        del.style.width = '32px';
+        del.style.height = '32px';
+        del.setAttribute('aria-label', 'Apagar conversa');
+        del.textContent = '×';
+        del.onclick = (ev) => {
+          ev.stopPropagation();
+          onDelete();
+        };
+
+        row.appendChild(btn);
+        row.appendChild(del);
+        list.appendChild(row);
+      }
+
+      function renderConversations() {
+        const list = document.querySelector('.chat-list');
+        if (!list) return;
+
+        list.innerHTML = '';
+        const deletedDefaults = loadDeletedDefaults();
+
+        DEFAULT_CONVERSATIONS
+          .filter((conv) => !deletedDefaults.has(conv.id))
+          .forEach((conv) => {
+            createRow({
+              name: conv.name,
+              preview: conv.preview,
+              onOpen: () => {
+                const params = new URLSearchParams({ i: conv.id, n: conv.name });
+                location.href = 'chat.html?' + params.toString();
+              },
+              onDelete: () => {
+                const updated = loadDeletedDefaults();
+                updated.add(conv.id);
+                saveDeletedDefaults(updated);
+                renderConversations();
+              }
+            });
+          });
+
+        const conversations = loadConversations();
         conversations
           .slice()
           .sort((a, b) => getLastTimestamp(b) - getLastTimestamp(a))
@@ -66,18 +127,26 @@
             const last = conv.messages && conv.messages.length ? conv.messages[conv.messages.length - 1].text : '';
             const preview = (last || '').trim() || 'Sem mensagens';
 
-            const btn = document.createElement('button');
-            btn.className = 'input chat';
-            btn.type = 'button';
-            btn.onclick = () => { location.href = 'chat.html?i=' + encodeURIComponent(conv.id); };
-            btn.innerHTML = `<strong>${conv.name || 'Contacto'}</strong>
-              <span style="margin-left:8px; color:var(--muted);">${preview}</span>`;
-
-            list.appendChild(btn);
+            createRow({
+              name: conv.name || 'Contacto',
+              preview,
+              onOpen: () => {
+                const params = new URLSearchParams({
+                  i: conv.id,
+                  n: conv.name || 'Contacto'
+                });
+                location.href = 'chat.html?' + params.toString();
+              },
+              onDelete: () => {
+                const remaining = loadConversations().filter((c) => c.id !== conv.id);
+                saveConversations(remaining);
+                renderConversations();
+              }
+            });
           });
       }
 
-      document.addEventListener('DOMContentLoaded', renderSavedConversations);
+      document.addEventListener('DOMContentLoaded', renderConversations);
     })();
   </script>
 </body>

@@ -8,43 +8,83 @@
   <script src="scripts/theme.js" defer></script>
   <script>
     const arquitetos = [
-      { nome: "Arquiteto 1" },
-      { nome: "Arquiteto 2" },
-      { nome: "Arquiteto 3" }
+      {
+        nome: "Arquiteto 1",
+        morada: "Bela Vista Office, Estr. de Paço de Arcos 66, 2735-308",
+        coords: { lat: 38.7609, lng: -9.297 }
+      },
+      {
+        nome: "Arquiteto 2",
+        morada: "Av. de Sintra 120, 2710-716 Sintra",
+        coords: { lat: 38.8021, lng: -9.3786 }
+      },
+      {
+        nome: "Arquiteto 3",
+        morada: "Rua da Liberdade 10, 2635-123 Rio de Mouro",
+        coords: { lat: 38.7705, lng: -9.3278 }
+      }
     ];
 
     window.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('architectSearch');
+      renderList();
+      if (searchInput) {
+        searchInput.addEventListener('input', () => renderList(searchInput.value));
+      }
+    });
+
+    function renderList(filterText = '') {
       const lista = document.getElementById('lista');
       if (!lista) return;
+      lista.innerHTML = '';
 
-      arquitetos.forEach((a, i) => {
+      const query = filterText.trim().toLowerCase();
+      const filtered = arquitetos
+        .map((a, idx) => ({ ...a, idx }))
+        .filter(({ nome }) => !query || (nome || '').toLowerCase().includes(query));
+
+      filtered.forEach((a) => {
         const item = document.createElement('div');
         item.className = 'input';
         item.style.cursor = 'pointer';
         item.style.alignItems = 'center';
         item.style.fontWeight = '500';
-        item.style.marginTop = '8px'; // espaço vertical entre itens
+        item.style.marginTop = '8px'; // espacamento vertical entre itens
         item.innerHTML = `
           <span>${a.nome}</span>
           <span style="margin-left:auto;display:flex;gap:8px;">
-               <button class="icon-btn" style="width:32px;height:32px;" onclick="verPerfil(${i})">👁</button>
-            <button class="icon-btn" style="width:32px;height:32px;" onclick="abrirChat(${i})">💬</button>
+            <button class="icon-btn" style="width:32px;height:32px;" onclick="verPerfil(${a.idx})">&#128100;</button>
+            <button class="icon-btn" style="width:32px;height:32px;" onclick="abrirChat(${a.idx})">&#128172;</button>
+            <button class="icon-btn" style="width:32px;height:32px;" onclick="fixarNoMapa(${a.idx})">&#128205;</button>
           </span>
         `;
         lista.appendChild(item);
       });
-    });
+    }
 
     function verPerfil(i){ location.href='architect-profiles.html?i='+i; }
     function abrirChat(i){ location.href='chat.html?i='+i; }
+    function fixarNoMapa(i){
+      const escolhido = arquitetos[i];
+      if (!escolhido) return;
+      localStorage.setItem('selectedArchitectLocation', JSON.stringify({
+        nome: escolhido.nome,
+        morada: escolhido.morada,
+        coords: escolhido.coords
+      }));
+      location.href = 'area.html';
+    }
   </script>
 </head>
 <body>
   <div class="app">
     <div class="card" role="main" aria-labelledby="architectsTitle" style="justify-content:flex-start;">
       <div class="header">
-        <button class="btn btn-primary" onclick="location.href='search.html'">←</button>
+        <button class="btn btn-primary" onclick="location.href='search.html'">&#8592;</button>
         <h2 id="architectsTitle">Arquitetos</h2>
+      </div>
+      <div class="input" style="margin-top:12px;">
+        <input id="architectSearch" type="search" placeholder="Procurar arquiteto pelo nome" aria-label="Procurar arquiteto">
       </div>
       <div id="lista" style="margin-top:0;"></div>
     </div>
