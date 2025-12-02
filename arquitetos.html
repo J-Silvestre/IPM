@@ -53,9 +53,9 @@
         item.innerHTML = `
           <span>${a.nome}</span>
           <span style="margin-left:auto;display:flex;gap:8px;">
-            <button class="icon-btn" style="width:32px;height:32px;" onclick="verPerfil(${a.idx})">&#128100;</button>
-            <button class="icon-btn" style="width:32px;height:32px;" onclick="abrirChat(${a.idx})">&#128172;</button>
-            <button class="icon-btn" style="width:32px;height:32px;" onclick="fixarNoMapa(${a.idx})">&#128205;</button>
+            <button class="icon-btn" style="width:32px;height:32px;" title="profile" aria-label="profile" onclick="verPerfil(${a.idx})">&#128100;</button>
+            <button class="icon-btn" style="width:32px;height:32px;" title="message" aria-label="message" onclick="abrirChat(${a.idx})">&#128172;</button>
+            <button class="icon-btn" style="width:32px;height:32px;" title="location" aria-label="location" onclick="fixarNoMapa(${a.idx})">&#128205;</button>
           </span>
         `;
         lista.appendChild(item);
