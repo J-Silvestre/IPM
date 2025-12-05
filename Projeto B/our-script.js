@@ -31,7 +31,7 @@ function applyGoalStyling() {
   // Highlight current/next goals
   styleGoal('.goal-0', '100%', '#00ff2a', '1');
   styleGoal('.goal-1', '100%', '#ffcc00', '2');
-  styleGoal('.goal-2', '100%', '#ff8800', '3');
+  // styleGoal('.goal-2', '100%', '#ff8800', '3');
 }
 
 function styleGoal(sel, size, color, label) {
