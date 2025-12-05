@@ -25,36 +25,49 @@ function applyGoalStyling() {
     t.removeAttribute('style'); // limpa quaisquer estilos inline de goal anterior
     t.textContent = '';
     t.parentElement.style.outline = 'none';
+    t.parentElement.style.border = 'none';
+    t.parentElement.style.boxSizing = 'border-box';
     t.classList.remove('pulse');
   });
 
   // Highlight current/next goals
   styleGoal('.goal-0', '100%', '#00ff2a', '1');
-  styleGoal('.goal-1', '100%', '#ffcc00', '2');
-  // styleGoal('.goal-2', '100%', '#ff8800', '3');
+  styleGoal('.goal-1', '33.3333%', '#ffcc00', '2', '4px');
+  // styleGoal('.goal-2', '33.3333%', '#ff8800', '3', '4px');
 }
 
-function styleGoal(sel, size, color, label) {
+function styleGoal(sel, size, color, label, outlineWidth = '3px') {
   const el = document.querySelector(sel);
   if (!el) return;
 
   el.style.width = size;
   el.style.height = size;
-  el.style.top = '0';
-  el.style.left = '0';
-  el.style.transform = 'none';
-  el.style.lineHeight = '100%';
+  if (size === '100%') {
+    el.style.top = '0';
+    el.style.left = '0';
+    el.style.transform = 'none';
+    el.style.lineHeight = '100%';
+  } else {
+    el.style.top = '50%';
+    el.style.left = '50%';
+    el.style.transform = 'translate(-50%, -50%)';
+    el.style.lineHeight = size;
+  }
 
   el.style.background = color;
-  el.style.boxShadow = `0 0 12px ${color}`;
+  el.style.boxShadow = 'none';
   el.style.borderRadius = '0';
+  el.style.boxSizing = 'border-box';
+  el.style.border = 'none';
   el.style.color = '#000';
   el.style.fontWeight = '700';
   el.style.fontSize = '1.2rem';
   el.style.textAlign = 'center';
   el.style.userSelect = 'none';
   el.textContent = label;
-  el.parentElement.style.outline = `3px solid ${color}`;
+  el.parentElement.style.outline = 'none';
+  el.parentElement.style.boxSizing = 'border-box';
+  el.parentElement.style.border = `${outlineWidth} solid ${color}`;
 
   if (sel === '.goal-0') {
     el.classList.add('pulse');
