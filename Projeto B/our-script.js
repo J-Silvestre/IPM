@@ -115,6 +115,21 @@ function processEnd(performance) {
   const avgTime = times.length
     ? times.reduce((a, b) => a + b, 0) / times.length
     : 0;
+  const minTime = times.length ? Math.min(...times) : 0;
+  const maxTime = times.length ? Math.max(...times) : 0;
+  const medianTime = (() => {
+    if (!times.length) return 0;
+    const sorted = [...times].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2; // fórmula da mediana
+  })();
+  const stdDevTime = (() => {
+    if (times.length < 2) return 0;
+    const mean = avgTime;
+    const variance = times.reduce((acc, t) => acc + Math.pow(t - mean, 2), 0) / times.length;
+    return Math.sqrt(variance); // Desvio padrão é a raiz quadrada da variância
+  })();
+
   const accuracy =
     performance.successes + performance.failures > 0
       ? performance.successes / (performance.successes + performance.failures)
@@ -125,6 +140,11 @@ function processEnd(performance) {
     user_id: performance.user_id,
     elapsed: performance.elapsed,
     avgTime: avgTime.toFixed(2),
+    minTime: minTime.toFixed(2),
+    maxTime: maxTime.toFixed(2),
+    medianTime: medianTime.toFixed(2),
+    stdDevTime: stdDevTime.toFixed(2),
+    timePerTarget: times.map(t => Number(t.toFixed(2))),
     successes: performance.successes,
     failures: performance.failures,
     mistakes: performance.mistakes,
