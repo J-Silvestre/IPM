@@ -12,10 +12,18 @@
     line-height: 100%;
     user-select: none;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pulse {
   animation: pulseAnim 1s infinite ease-in-out;
+}
+
+/* Global zoom to 80% */
+html {
+    zoom: 0.9;
 }
 
 @keyframes pulseAnim {
@@ -26,6 +34,49 @@
 
 #grid {
     position: relative;
-    /* Cursor grande com contorno branco para máxima visibilidade */
-    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><circle cx='24' cy='24' r='10' fill='none' stroke='%23ffffff' stroke-width='3'/><circle cx='24' cy='24' r='3' fill='%23ffffff'/><path d='M24 2v12M24 34v12M2 24h12M34 24h12' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/></svg>") 24 24, crosshair;
+    /* Cursor grande com contorno vermelho-alaranjado para máxima visibilidade */
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><circle cx='24' cy='24' r='10' fill='none' stroke='%23ff5722' stroke-width='3'/><circle cx='24' cy='24' r='3' fill='%23ff5722'/><path d='M24 2v12M24 34v12M2 24h12M34 24h12' stroke='%23ff5722' stroke-width='3' stroke-linecap='round'/></svg>") 24 24, crosshair;
+}
+
+/* Fit layout to viewport without scrolling */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #eeeeee;
+    overflow-y: auto;
+    padding: 12px 0 20px;
+}
+
+main {
+    width: min(960px, 100vw - 40px);
+    margin: 0 auto;
+    max-width: 960px;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 16px 20px;
+}
+
+/* Keep grid square and responsive to viewport */
+:root {
+    /* Allow more breathing room inside the widened main container */
+    --grid-size: clamp(240px, min(90vw, calc(100vw - 140px), calc(100vh - 280px)), 700px);
+}
+
+#grid {
+    width: var(--grid-size);
+    height: var(--grid-size);
+}
+
+/* Hide explanatory paragraph about successes/failures without touching HTML */
+#arena p:nth-of-type(2) {
+    display: none;
 }
