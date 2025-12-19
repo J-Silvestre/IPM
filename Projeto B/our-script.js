@@ -27,6 +27,10 @@ function applyGoalStyling() {
     t.parentElement.style.outline = 'none';
     t.parentElement.style.border = 'none';
     t.parentElement.style.boxSizing = 'border-box';
+    if (t.parentElement.classList.contains('goal-cell-fill')) {
+      t.parentElement.style.background = '';
+      t.parentElement.classList.remove('goal-cell-fill');
+    }
     t.classList.remove('pulse');
   });
 
@@ -54,7 +58,13 @@ function styleGoal(sel, size, color, label, outlineWidth = '3px') {
     el.style.lineHeight = size;
   }
 
-  el.style.background = color;
+  if (sel === '.goal-1') {
+    el.style.background = 'transparent';
+    el.parentElement.style.background = color;
+    el.parentElement.classList.add('goal-cell-fill');
+  } else {
+    el.style.background = color;
+  }
   el.style.boxShadow = 'none';
   el.style.borderRadius = '0';
   el.style.boxSizing = 'border-box';
